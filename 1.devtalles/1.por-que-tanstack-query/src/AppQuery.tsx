@@ -1,4 +1,4 @@
-import { useRandom } from './hooks';
+import { useQuery } from '@tanstack/react-query';
 
 export async function getRandomNumber(): Promise<number> {
   // throw 'No se pudo obtener el número';
@@ -11,7 +11,18 @@ export async function getRandomNumber(): Promise<number> {
 }
 
 function App() {
-  const { isFetching, randomNumber, error, refetch } = useRandom();
+  const {
+    isFetching,
+    data: randomNumber,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['randomNumber'],
+    queryFn: getRandomNumber,
+    // retry: false,
+    // staleTime: 1000 * 5,
+    // refetchOnWindowFocus: false,
+  });
 
   return (
     <>
