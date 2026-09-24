@@ -16,7 +16,7 @@ export const IssueView = () => {
   if (issueQuery.isLoading) return <div>Cargando issue</div>;
   if (!issueQuery.data) return <Navigate to="/404" />;
 
-  console.log(params);
+  // console.log(params);
 
   return (
     <div className="mb-5">
