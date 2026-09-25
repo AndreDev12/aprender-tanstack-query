@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import { GithubIssue, State } from '../interfaces';
 import { getIssue, getIssueComments } from '../actions';
+import { timeSince } from '../../helpers';
 
 interface IssueItemProps {
   issue: GithubIssue;
@@ -42,7 +43,7 @@ export const IssueItem: FC<IssueItemProps> = ({ issue }) => {
       className="animate-fadeIn  flex items-center px-2 py-3 mb-5 border rounded-md bg-slate-900 hover:bg-slate-800"
     >
       {issue.state === State.Close ? (
-        <FiCheckCircle size={30} color="green min-w-10" />
+        <FiCheckCircle size={30} color="green" className="min-w-10" />
       ) : (
         <FiInfo size={30} color="red" className="min-w-10" />
       )}
@@ -55,9 +56,21 @@ export const IssueItem: FC<IssueItemProps> = ({ issue }) => {
           {issue.title}
         </a>
         <span className="text-gray-500">
-          #{issue.number} opened 2 days ago by{' '}
+          #{issue.number} opened {timeSince(issue.created_at)} ago by{' '}
           <span className="font-bold">{issue.user.login}</span>
         </span>
+
+        <div className="flex flex-wrap">
+          {issue.labels.map((label) => (
+            <span
+              key={label.id}
+              className="px-2 mr-2 py-1 text-xs text-white rounded-md"
+              style={{ border: `1px solid #${label.color}` }}
+            >
+              {label.name}
+            </span>
+          ))}
+        </div>
       </div>
 
       <img
