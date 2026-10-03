@@ -1,17 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router';
 // import { useEffect, useState } from 'react';
 
 import type { Data } from '../interface';
 
 export const Query = () => {
-  const { isPending, error, data } = useQuery({
-    queryKey: ['repoData'],
-    queryFn: async (): Promise<Data> =>
-      fetch('https://api.github.com/repos/TanStack/query').then((res) =>
-        res.json(),
-      ),
-  });
+  function groupOptions() {
+    return queryOptions({
+      queryKey: ['repoData'],
+      queryFn: async (): Promise<Data> =>
+        fetch('https://api.github.com/repos/TanStack/query').then((res) =>
+          res.json(),
+        ),
+    });
+  }
+  console.log(groupOptions());
+
+  const { isPending, error, data } = useQuery(groupOptions());
+
+  // const { isPending, error, data } = useQuery({
+  //   queryKey: ['repoData'],
+  //   queryFn: async (): Promise<Data> =>
+  //     fetch('https://api.github.com/repos/TanStack/query').then((res) =>
+  //       res.json(),
+  //     ),
+  // });
 
   if (isPending) return <h2>Loading...</h2>;
 
