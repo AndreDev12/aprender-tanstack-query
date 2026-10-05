@@ -12,6 +12,7 @@ export const Query = () => {
         fetch('https://api.github.com/repos/TanStack/query').then((res) =>
           res.json(),
         ),
+      // networkMode: 'always',
     });
   }
   console.log(groupOptions());
