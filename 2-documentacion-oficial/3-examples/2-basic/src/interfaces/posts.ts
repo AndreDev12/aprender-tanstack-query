@@ -1,3 +1,3 @@
-export interface PostsProps {
-  setPostId: React.Dispatch<React.SetStateAction<number>>;
-}
+import type { PostProps } from './post';
+
+export interface PostsProps extends PostProps {}

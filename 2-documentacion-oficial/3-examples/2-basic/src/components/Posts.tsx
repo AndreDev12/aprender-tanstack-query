@@ -21,9 +21,11 @@ export const Posts = ({ setPostId }: PostsProps) => {
               {data.map(({ id, title }) => (
                 <p key={id}>
                   <a
-                    onClick={() => setPostId(id)}
-                    href="#"
+                    onClick={() => setPostId!(id)}
+                    href={`#${id}`}
                     style={
+                      // We can access the query data here to show bold links for
+                      // ones that are cached
                       queryClient.getQueryData(['post', id])
                         ? { fontWeight: 'bold', color: 'green' }
                         : {}
