@@ -11,6 +11,7 @@ export default function Example() {
     queryKey: ['todos'],
     queryFn: async (): Promise<Array<string>> => {
       const response = await fetch('/api/data');
+      if (!response.ok) throw new Error('Failed to fetch data');
       return await response.json();
     },
     // Refetch the data every second
@@ -18,7 +19,10 @@ export default function Example() {
   });
 
   const addMutation = useMutation({
-    mutationFn: (add: string) => fetch(`/api/data?add=${add}`),
+    mutationFn: async (add: string) => {
+      const response = await fetch(`/api/data?add=${add}`);
+      if (!response.ok) throw new Error('Failed to add todo');
+    },
     onSuccess: (mutationResult) => {
       console.log('Mutation result:', mutationResult); // Testing
       return queryClient.invalidateQueries({ queryKey: ['todos'] });
@@ -26,7 +30,10 @@ export default function Example() {
   });
 
   const clearMutation = useMutation({
-    mutationFn: (digit: number) => fetch(`/api/data?clear=${digit}`),
+    mutationFn: async (digit: number) => {
+      const response = await fetch(`/api/data?clear=${digit}`);
+      if (!response.ok) throw new Error('Failed to delete todo');
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
