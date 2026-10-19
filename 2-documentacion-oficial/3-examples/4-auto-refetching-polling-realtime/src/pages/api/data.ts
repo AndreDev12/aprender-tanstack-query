@@ -15,10 +15,11 @@ export default async (
       list.push(add);
     }
   } else if (clear) {
-    list = [];
+    list = list.filter((_, index) => index !== Number(clear));
+    // list = [];
   }
 
-  await new Promise((r) => setTimeout(r, 1000));
+  await new Promise((r) => setTimeout(r, 100));
 
   res.json(list);
 };

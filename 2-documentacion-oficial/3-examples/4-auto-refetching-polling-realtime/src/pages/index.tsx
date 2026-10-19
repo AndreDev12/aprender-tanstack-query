@@ -1,11 +1,11 @@
-import React from 'react';
+import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function Example() {
   const queryClient = useQueryClient();
-  const [intervalMs, setIntervalMs] = React.useState(1000);
-  const [value, setValue] = React.useState('');
+  const [intervalMs, setIntervalMs] = useState(1000);
+  const [value, setValue] = useState('');
 
   const { status, data, error, isFetching } = useQuery({
     queryKey: ['todos'],
@@ -19,11 +19,14 @@ export default function Example() {
 
   const addMutation = useMutation({
     mutationFn: (add: string) => fetch(`/api/data?add=${add}`),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
+    onSuccess: (mutationResult) => {
+      console.log('Mutation result:', mutationResult); // Testing
+      return queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
   });
 
   const clearMutation = useMutation({
-    mutationFn: () => fetch(`/api/data?clear=1`),
+    mutationFn: (digit: number) => fetch(`/api/data?clear=${digit}`),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['todos'] }),
   });
 
@@ -77,18 +80,26 @@ export default function Example() {
         />
       </form>
       <ul>
-        {data.map((item) => (
-          <li key={item}>{item}</li>
+        {data.map((item, index) => (
+          <div key={index} className="flex items-center gap-5 m-2">
+            <li>{item}</li>
+            <button
+              className="bg-red-900 border p-1"
+              onClick={() => clearMutation.mutate(index)}
+            >
+              X
+            </button>
+          </div>
         ))}
       </ul>
       <div>
-        <button
+        {/* <button
           onClick={() => {
             clearMutation.mutate();
           }}
         >
           Clear All
-        </button>
+        </button> */}
       </div>
       <ReactQueryDevtools initialIsOpen />
     </div>
