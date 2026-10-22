@@ -14,7 +14,6 @@ export default function Example() {
   const [page, setPage] = useState(0);
 
   const { status, data, error, isFetching, isPlaceholderData } = useQuery({
-    //continuar
     ...projectsQueryOptions(page),
     placeholderData: keepPreviousData,
   });
